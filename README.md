@@ -34,8 +34,6 @@ For this example, there will be used the design picorv32a. It can be found in th
 
 ![Untitled](Day%201%20649c37faeca741a4aa844421c98653ef/Untitled%203.png)
 
-config.tcl bypasses any configurations that has been already done 
-
 <aside>
 📌 The other .tcl files are the more detailed configuration files and has higher priority. We can’t run the flow without config.tcl
 
