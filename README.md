@@ -175,3 +175,39 @@ Then we can see the resulting floorplanning in magic:
 
 ![Untitled](Day%202%20ec8488d7a7634fb4b1164e6d91da0f45/Untitled%206.png)
 
+### Placement using RePlAce
+
+<aside>
+📌 OpenLane uses HPWL to do Placement.
+
+</aside>
+
+<aside>
+📌 Placement goes in two stages: the global placement and the detailed placement. Legalization occurs in Detail placement. Legality is the rules used to place STD cells. For example, there should be no overlaps.
+
+</aside>
+
+- After obtaining the floorplan we run placement:
+
+```python
+run_placement
+```
+
+After the run, a placement analysis is obtained and we can see that the placement is legalized.
+
+![Untitled](Day%202%20ec8488d7a7634fb4b1164e6d91da0f45/Untitled%207.png)
+
+- Now, to see how our design is after placement, we go to the folder results/placement and run the following command:
+
+```python
+magic -T /home/jhonstevenpintoh/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech leaf read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+Here we can see that the power network was made in this step, not in the floorplan stage
+
+![Untitled](Day%202%20ec8488d7a7634fb4b1164e6d91da0f45/Untitled%208.png)
+
+
+## Day 3
+
+
