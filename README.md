@@ -1,13 +1,13 @@
 # Sky130-PD-WorkShop
 
 # Table of Contents
-  - [Day 1](##Day-1)
-    - [Starting OpenLANE](###Starting-OpenLANE)
-    - [Basic folders and files](###Basic-folders-and-files)
-    - [Preparing the design](###Preparing-the-design)
-    - [Running Synthesis & ABC](###Running-Synthesis-&-ABC)
+  - [Day 1](##-Day-1)
+    - [Starting OpenLANE](###-Starting-OpenLANE)
+    - [Basic folders and files](###-Basic-folders-and-files)
+    - [Preparing the design](###-Preparing-the-design)
+    - [Running Synthesis & ABC](###-Running-Synthesis-&-ABC)
     - [Characterize synthesis results](###-Characterize-synthesis-results)
-    - [FF Ratio](###FF-Ratio)
+    - [FF Ratio](###-FF-Ratio)
 
 
 
