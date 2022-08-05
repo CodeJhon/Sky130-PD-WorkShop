@@ -1,5 +1,8 @@
 # Sky130-PD-WorkShop
 
+# Table of Contents
+  - [Day 1](##Day-1)
+
 
 <aside>
 ⚙️Report from Jhon Pinto for the SkyWater130 Physical Design Workshop held in Aug 2 - 6
