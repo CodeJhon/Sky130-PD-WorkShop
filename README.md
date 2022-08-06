@@ -343,3 +343,6 @@ For characterizing, it means to find 4 parameters:
 $$
 RiseCellDelay = 4.0528ns-4.05ns = 2.82ps
 $$
+
+
+## Day 4
