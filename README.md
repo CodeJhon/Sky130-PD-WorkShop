@@ -346,3 +346,211 @@ $$
 
 
 ## Day 4
+
+<aside>
+📌 For the PnR tool, the only thing needed is the boundary, the power and the ground rails and the input and output pins.
+
+</aside>
+
+### Information about the tracks
+
+For info about the tracks and pitch dimensions, go to the folder pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd and open the file tracks.info
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled.png)
+
+### Checking the pin distribution
+
+To confirm if the pins are located at the intersection of the horizontal and vertical tracks, we run at the magic terminal the following command:
+
+```python
+grid 0.46um 0.34um 0.23um 0.17um
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%201.png)
+
+<aside>
+📌 Here we can confirm that the pins are located at those intersections
+
+</aside>
+
+### Creating the ports
+
+For creating the ports we go to Edit→ Text and after selecting the port, define the tab as follows:
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%202.png)
+
+### Setting port class and port use attributes
+
+In this part we “tell” the program what port is vdd what port is the input and so on. For that we use the following commands:
+
+```python
+what
+port class [inout/input/output]
+port use [ground/power/signal]
+```
+
+<aside>
+📌 The type of the command depends on the type of the port
+
+</aside>
+
+### Extracting the LEF file
+
+For creating a copy of our principal mag file, we run the command in the magic terminal:
+
+```python
+save [name].mag
+```
+
+After opening the copy, create the lef file with:
+
+```python
+lef write
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%203.png)
+
+### Copying the custom cell and characterization files into the OpenLANE flow
+
+in the /openlane/vsdstdcelldesign/ copy the following files:
+
+```python
+cp sky130_vsdinv.lef /home/USER/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+```
+
+Also in /openlane/vsdstdcelldesign/libs copy the following files
+
+```python
+cp sky130_fd_sc_hd__* /home/USER/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+```
+
+### Set the config.tcl file
+
+Now, we need to configure the config.tcl file in the picorv32 folder
+
+```python
+vim config.tcl
+```
+
+```python
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hdtypical.lib"
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hdfast.lib"
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hdslow.lib"
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hdtypical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%204.png)
+
+### Invoke OpenLANE with a specific run
+
+- Launch openlane (if you don’t have it launched already)
+
+```python
+docker
+
+./flow.tcl -interactive
+
+package require openlane 0.9
+
+prep -design picorv32a -tag [tag] -overwrite
+
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+
+add_lefs -src $lefs
+
+run_synthesis
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%205.png)
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%206.png)
+
+### Fixing slack violations
+
+- First, we fix manually the variables which has to be:
+
+```python
+echo $::env(SYNTH_STRATEGY)
+
+set ::env(SYNTH_STRATEGY) 1
+
+echo $::env(SYNTH_BUFFERING)
+
+echo $::env(SYNTH_SIZING)
+
+set ::env(SYNTH_SIZING) 1
+
+echo $::env(SYNTH_DRIVING_CELL)
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%207.png)
+
+- now we run again the synthesis, floorplan and placement
+
+```python
+run_synthesis
+
+init_floorplan
+
+place_io
+
+global_placement_or
+
+detailed_placement
+
+tap_decap_or
+
+detailed_placement
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%208.png)
+
+### Check the new std cells in the placement
+
+Running the .mag file of the placement results we can see that the std cells were succesfully placed
+
+```python
+magic -T /home/**USER**/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%209.png)
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%2010.png)
+
+### Editing sta config file
+
+Now, in the /openlane/ folder, we edit:
+
+```python
+vim sta.conf
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%2011.png)
+
+### Editing sta config file
+
+In the /picorv32a/src/ folder, we modify the sta.conf file as follows:
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%2012.png)
+
+### Run sta.conf
+
+In the openlane folder we run:
+
+```python
+sta sta.conf
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%2013.png)
+
+### Run Clock Tree Synthesis
+
+In the terminal from openlane, run:
+
+```python
+run_cts
+```
+
+![Untitled](Day%204%20cfb17cb0b93b48779f582ffd7ef976ba/Untitled%2014.png)
