@@ -558,3 +558,43 @@ run_cts
 
 ## Day 5
 
+### Launch OpenLANE
+
+<aside>
+📌 If you have it already open, close it and launch it again
+
+</aside>
+
+```python
+docker
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a -tag [tag]
+```
+
+![Untitled](Day%205%201577ed4f69ea4078b6e5fd853f02bd0b/Untitled.png)
+
+### Generate the Power Distribution Network
+
+Then, in the same terminal, run:
+
+```python
+gen_pdn
+```
+
+![Untitled](Day%205%201577ed4f69ea4078b6e5fd853f02bd0b/Untitled%201.png)
+
+### Running placement
+
+Finally, we run the placement command in the openlane terminal:
+
+```python
+run_routing
+```
+
+<aside>
+📌 If there is any DRC violations, we will have to correct them manually
+
+</aside>
+
+
