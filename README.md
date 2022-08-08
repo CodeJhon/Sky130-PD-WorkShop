@@ -584,7 +584,7 @@ gen_pdn
 
 ![Untitled](Day%205%201577ed4f69ea4078b6e5fd853f02bd0b/Untitled%201.png)
 
-### Running placement
+### Running routing
 
 Finally, we run the placement command in the openlane terminal:
 
